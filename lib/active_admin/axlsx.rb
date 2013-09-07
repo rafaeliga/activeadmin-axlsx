@@ -18,7 +18,12 @@ class Railtie < ::Rails::Railtie
 
     ActiveAdmin::ResourceDSL.send :include, ActiveAdmin::Axlsx::DSL
     ActiveAdmin::Resource.send :include, ActiveAdmin::Axlsx::ResourceExtension
-    ActiveAdmin::ResourceController.send :include, ActiveAdmin::Axlsx::ResourceControllerExtension
+
+    # tmp fix for assets:precompile - https://github.com/randym/activeadmin-axlsx/issues/12
+    if ENV['PRECOMPILE'] != "true"
+      ActiveAdmin::ResourceController.send :include, ActiveAdmin::Axlsx::ResourceControllerExtension
+    end
+
     # TODO remove < 0.5.1 block once active admin has released.
     # Pull request to fix build download format links has already been merged into active admin.
     if ActiveAdmin::VERSION < '0.5.1'
